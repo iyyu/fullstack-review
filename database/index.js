@@ -1,37 +1,60 @@
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/fetcher');
 
-let repoSchema = mongoose.Schema({
-  // TODO: your schema here!
-  
-  // ex.
-  // title:  String,
-  // author: String,
-  // body:   String,
-  // comments: [{ body: String, date: Date }],
-  // date: { type: Date, default: Date.now },
-  // hidden: Boolean,
-  // meta: {
-  //   votes: Number,
-  //   favs:  Number
-
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+  console.log('and we are in');
 });
 
+let repoSchema = mongoose.Schema({
+  // TODO: your schema here!
+  id: Number,
+  repo_name: String,
+  repo_url: String,
+  owner_name: String,
+  description: String,
+  updated_at: String
+});
 let Repo = mongoose.model('Repo', repoSchema);
+  //sequelize is to mongoose as mysql is to mongodb
+  // a collection is like a table
+  // schemas are similar
+  
+// NOTE FROM MONGOOSE DOCUMENTATION: methods must be added to the schema before compiling it with mongoose.model()
 
-let save = (/* TODO */) => {
+let save = (repoArr) => {
   // TODO: Your code here
   // This function should save a repo or repos to
   // the MongoDB
-   Repo.init().then(function() {
-      Repo.create(dup, function(error) {
-        // Will error, but will *not* be a mongoose validation error, it will be
-        // a duplicate key error.
-        assert.ok(error);
-        assert.ok(!error.errors);
-        assert.ok(error.message.indexOf('duplicate key error') !== -1);
-      });
+  repoArr.map((repo) => {
+    let eachRepo = new Repo({
+      repo_name: `${repo.name}`,
+      repo_url: `${repo.html_url}`,
+      owner_name: `${repo.owner.login}`,
+      description: `${repo.description}` || 'no description available',
+      updated_at: `${repo.updated_at}`
     });
+    eachRepo.save(function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });
+  })
 }
 
-module.exports.save = save;
+let findAllRepos = (callback) => {
+  // db.Repo.find({}, (err, repo) => {
+  //   if (err) {
+  //     console.log(err);
+  //   }
+  //   callback(null, repo);
+  // });
+  // should be equivalent to mongo shell command
+  // db.repos.find({"owner_name": "iyyu"})
+}
+
+module.exports = {
+  save,
+  findAllRepos
+}
