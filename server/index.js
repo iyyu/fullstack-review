@@ -37,7 +37,7 @@ app.get('/repos', function (req, res) {
 app.get('/top', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
-  
+  // finds freshes repos sorted by updated_at
   db.findTopRepos((err, repos) => {
     res.send(repos);
   });

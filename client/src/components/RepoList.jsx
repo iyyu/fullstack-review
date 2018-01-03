@@ -5,7 +5,7 @@ const RepoList = (props) => (
     <h4> Repo List Component </h4>
     There are {props.repos.length} repos. 
     <button onClick={props.getRepos}>Get All</button>
-    <button onClick={props.getTopRepos}>Get Top</button>
+    <button onClick={props.getTopRepos}>Get Newest</button>
   </div>
 )
 
