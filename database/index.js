@@ -28,8 +28,6 @@ let save = (repoArr) => {
   // This function should save a repo or repos to
   // the MongoDB
   repoArr.map((repo) => {
-    console.log(repo.description);
-
     let eachRepo = new RepoModel({
       repo_name: `${repo.name}`,
       repo_url: `${repo.html_url}`,
@@ -46,29 +44,26 @@ let save = (repoArr) => {
 }
 
 let findAllRepos = (callback) => {
-  // console.log(RepoModel.find({}));
-  // var findCursor = RepoModel.find({}).cursor();
-  // findCursor.next((err, repo) => {
-  //   if (err) {
-  //     console.log(err);
-  //   }
-  //   callback(null, repo);
-  // });
   RepoModel.find({}).then((repos) => {
-    // if (err) {
-    //   console.log('ERROR', err);
-    // }
-    // repos.forEach((repo) => {
-    //   console.log('each repo', repo);
-    //   callback(null, repo)
-    // });
     callback(null, repos);
   });
   // should be equivalent to mongo shell command
   // db.repos.find({"owner_name": "iyyu"})
 }
 
+let findTopRepos = (callback) => {
+  //finds freshes repos aka sorted by date
+  RepoModel
+  .find({})
+  .sort('-updated_at')
+  .limit(25)
+  .then((sortedRepos) => {
+    callback(null, sortedRepos);
+  })
+}
+
 module.exports = {
   save,
-  findAllRepos
+  findAllRepos,
+  findTopRepos
 }

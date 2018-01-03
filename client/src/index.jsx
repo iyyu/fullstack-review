@@ -13,6 +13,7 @@ class App extends React.Component {
     }
   this.search = this.search.bind(this);
   this.getRepos = this.getRepos.bind(this);
+  this.getTopRepos = this.getTopRepos.bind(this);
   }
 
   search (term) {
@@ -34,12 +35,20 @@ class App extends React.Component {
       this.setState({repos: response.data});
     });
   }
+  
+  getTopRepos() {
+    axios.get('/top')
+    .then((response) => {
+      this.setState({repos: response.data});
+    })
+  }
+  
 
   render () {
     return (<div>
       <h1>Github Fetcher</h1>
       <Search onSearch={this.search}/>
-      <RepoList repos={this.state.repos} key={this.state.repos.id} getRepos={this.getRepos}/>
+      <RepoList repos={this.state.repos} key={this.state.repos.id} getRepos={this.getRepos} getTopRepos={this.getTopRepos}/>
     </div>)
   }
 }

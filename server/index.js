@@ -25,12 +25,20 @@ app.post('/repos', function (req, res) {
   
 });
 
-
 app.get('/repos', function (req, res) {
   // TODO - your code here!
   // This route should send back the top 25 repos
-
+  
   db.findAllRepos((err, repos) => {
+    res.send(repos);
+  });
+});
+
+app.get('/top', function (req, res) {
+  // TODO - your code here!
+  // This route should send back the top 25 repos
+  
+  db.findTopRepos((err, repos) => {
     res.send(repos);
   });
 });
