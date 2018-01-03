@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import $ from 'jquery';
-import axios from 'axios';
 import Search from './components/Search.jsx';
 import RepoList from './components/RepoList.jsx';
 
@@ -26,14 +25,6 @@ class App extends React.Component {
         console.log('success', data);
       }
     })
-    // axios.post('/repos', {username: term})
-    // .then(function (response) {
-    //   console.log(response);
-    // })
-    // .catch(function (error) {
-    //   console.log(error);
-    // })
-    // this.getRepos();
   }
   
   getRepos() {
