@@ -4,7 +4,7 @@ mongoose.connect('mongodb://localhost/fetcher');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
-  console.log('and we are in');
+  console.log('Connected to Mongo');
 });
 
 let repoSchema = mongoose.Schema({
@@ -16,7 +16,7 @@ let repoSchema = mongoose.Schema({
   description: String,
   updated_at: String
 });
-let Repo = mongoose.model('Repo', repoSchema);
+let RepoModel = mongoose.model('Repo', repoSchema);
   //sequelize is to mongoose as mysql is to mongodb
   // a collection is like a table
   // schemas are similar
@@ -28,7 +28,9 @@ let save = (repoArr) => {
   // This function should save a repo or repos to
   // the MongoDB
   repoArr.map((repo) => {
-    let eachRepo = new Repo({
+    console.log(repo.description);
+
+    let eachRepo = new RepoModel({
       repo_name: `${repo.name}`,
       repo_url: `${repo.html_url}`,
       owner_name: `${repo.owner.login}`,
@@ -44,12 +46,24 @@ let save = (repoArr) => {
 }
 
 let findAllRepos = (callback) => {
-  // db.Repo.find({}, (err, repo) => {
+  // console.log(RepoModel.find({}));
+  // var findCursor = RepoModel.find({}).cursor();
+  // findCursor.next((err, repo) => {
   //   if (err) {
   //     console.log(err);
   //   }
   //   callback(null, repo);
   // });
+  RepoModel.find({}).then((repos) => {
+    // if (err) {
+    //   console.log('ERROR', err);
+    // }
+    // repos.forEach((repo) => {
+    //   console.log('each repo', repo);
+    //   callback(null, repo)
+    // });
+    callback(null, repos);
+  });
   // should be equivalent to mongo shell command
   // db.repos.find({"owner_name": "iyyu"})
 }
