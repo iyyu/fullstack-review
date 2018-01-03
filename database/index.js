@@ -9,7 +9,7 @@ db.once('open', function() {
 
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
-  id: Number,
+  repo_id: {type: String, unique: true},
   repo_name: String,
   repo_url: String,
   owner_name: String,
@@ -25,22 +25,24 @@ let RepoModel = mongoose.model('Repo', repoSchema);
 
 let save = (repoArr) => {
   // TODO: Your code here
+  // IY COMMENT: Exporting this function and calling it into the app.post method of server index.js was causing duplicates to be saved into my db. To fix this, we export the model directly so that the github.js function getReposByUsername then creates documents directly and also saves them into the db.
   // This function should save a repo or repos to
-  // the MongoDB
-  repoArr.map((repo) => {
-    let eachRepo = new RepoModel({
-      repo_name: `${repo.name}`,
-      repo_url: `${repo.html_url}`,
-      owner_name: `${repo.owner.login}`,
-      description: `${repo.description}` || 'no description available',
-      updated_at: `${repo.updated_at}`
-    });
-    eachRepo.save(function(err) {
-      if (err) {
-        console.log(err);
-      }
-    });
-  })
+  // the MongoDB (which has since been exported)
+  // repoArr.forEach((repo) => {
+  //   let eachRepo = new RepoModel({
+  //     repo_id: `${repo.id}`,
+  //     repo_name: `${repo.name}`,
+  //     repo_url: `${repo.html_url}`,
+  //     owner_name: `${repo.owner.login}`,
+  //     description: `${repo.description}`,
+  //     updated_at: `${repo.updated_at}`
+  //   });
+  //   eachRepo.save(function(err, data) {
+  //     if (err) {
+  //       console.log('did not save');
+  //     }
+  //   });
+  // })
 }
 
 let findAllRepos = (callback) => {
@@ -64,6 +66,7 @@ let findTopRepos = (callback) => {
 
 module.exports = {
   save,
+  RepoModel,
   findAllRepos,
   findTopRepos
 }

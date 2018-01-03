@@ -19,7 +19,7 @@ app.post('/repos', function (req, res) {
   req.on('end', function (err, data) {
     if (err) { throw err; }
     var parsed = JSON.parse(body);
-    github.getReposByUsername(parsed.username, db.save);
+    github.getReposByUsername(parsed.username);
   res.send(username);
   })
   
