@@ -11,7 +11,6 @@ app.post('/repos', function (req, res) {
   // and get the repo information from the github API, then
   // save the repo information in the database
   var username = req.body;
-
   var body = '';
   req.on('data', function (chunk) {
     body += chunk;
@@ -19,8 +18,13 @@ app.post('/repos', function (req, res) {
   req.on('end', function (err, data) {
     if (err) { throw err; }
     var parsed = JSON.parse(body);
-    github.getReposByUsername(parsed.username);
-  res.send(username);
+    github.getReposByUsername(parsed.username, () => {
+      res.sendStatus(201);
+      res.send();
+    });
+    
+
+  // it can be good to send specific information but sending a status to the ajax request is better because the header will let the ajax call know that it's been successful/created
   })
   
 });

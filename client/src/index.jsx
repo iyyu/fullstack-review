@@ -16,23 +16,32 @@ class App extends React.Component {
   this.getTopRepos = this.getTopRepos.bind(this);
   }
 
+  componentDidMount() {
+    this.getRepos();
+  }
+
   search (term) {
     console.log(`${term} was searched`);
     $.ajax({
       type: 'POST',
       url: 'http://127.0.0.1:1128/repos',
       data: JSON.stringify({username: term}),
-      dataType: 'json',
-      success: function(data) {
+      success: data => {
         console.log('success', data);
+        this.getRepos();
+      },
+      error: error => {
+        console.log('error', error);
       }
     })
   }
   
   getRepos() {
+    // even though getRepos is bound to 'this' App component, the context of 'this' doesn't fall through in the setState after the axios.get
+    var context = this;
     axios.get('/repos')
     .then((response) => {
-      this.setState({repos: response.data});
+      context.setState({repos: response.data});
     });
   }
   

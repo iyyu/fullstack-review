@@ -9,7 +9,7 @@ db.once('open', function() {
 
 let repoSchema = mongoose.Schema({
   // TODO: your schema here!
-  repo_id: {type: String, unique: true},
+  repo_id: {type: String, dropDups: true, unique: true },
   repo_name: String,
   repo_url: String,
   owner_name: String,

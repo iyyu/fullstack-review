@@ -1,5 +1,4 @@
 import React from 'react';
-import Repo from './Repo.jsx';
 
 const RepoList = (props) => (
   <div>
@@ -18,7 +17,7 @@ const RepoList = (props) => (
           <th>Repo Last Updated</th>
         </tr>
         {props.repos.map((repo) => 
-          <tr>
+          <tr key={repo.repo_id}>
             <th>{repo.owner_name}</th>
             <th>{repo.repo_name}</th>
             <th>{repo.repo_url}</th>
